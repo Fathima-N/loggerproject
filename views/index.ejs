@@ -36,8 +36,8 @@
     <% messages.forEach( message => { %>
       <tr class="table-light">
         <td><%=message.severity %></td>
-        <td><%=message.timestamp %></td>
-        <td><%=message.servername %></td>
+        <td><%=message.created_at %></td>
+        <td><%=message.server_name %></td>
         <td><%=message.message %></td>
       </tr>
     <% }) %>

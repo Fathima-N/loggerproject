@@ -40,18 +40,32 @@ app.use("/api/users", usersRoutes(knex));
 
 // Home page
 app.get("/", (req, res) => {
-  //rendering data from the server. storing the data in the variable templateVars
-  let templateVars = {
-    messages: [ 
-      {
-        severity: "info",
-        timestamp: "5 hours ago",
-        severname: "localhost",
-        message: "all is good"
-      }
-    ]
-  }
-  res.render("index", templateVars);
+  // rendering data from the server. storing the data in the variable templateVars
+  // let templateVars = {
+  //   messages: [ 
+  //     {
+  //       severity: "info",
+  //       timestamp: "5 hours ago",
+  //       sever_name: "localhost",
+  //       message: "all is good"
+  //     }
+  //   ]
+  // }
+
+ //rendering data from the database. Knex is using promises - first it's making a query, then it's returning the results, then storing it in the variable templateVars
+ //if we first store knex in the tempalteVars variable, it's not based on a promise anymore and won't show anything. 
+  knex 
+  .select("*")
+  .from("logger")
+  .then((results) => {
+    let templateVars = {
+      messages: results
+    }
+   res.render("index", templateVars);
+  })   
+  
+  // console.log(templateVars)
+
 });
 
 app.listen(PORT, () => {
