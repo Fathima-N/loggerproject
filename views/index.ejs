@@ -25,7 +25,6 @@
       <table class="table table-sm">
   <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">Severity</th>
       <th scope="col">Timestamp</th>
       <th scope="col">Server Name</th>
@@ -33,49 +32,15 @@
     </tr>
   </thead>
   <tbody>
-    <tr class="table-light">
-      <th scope="row">1</th>
-      <td>Info</td>
-      <td>1 hour ago</td>
-      <td>Localhost</td>
-      <td>All is good.</td>
-    </tr>
-    <tr class="table-primary">
-      <th scope="row">2</th>
-      <td>Debug</td>
-      <td>3 hours ago</td>
-      <td>Localhost</td>
-      <td>All is good.</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Trace</td>
-      <td>10 days ago</td>
-      <td>Localhost</td>
-      <td>All is good.</td>
-    </tr>
-    <tr class="table-warning">
-      <th scope="row">4</th>
-      <td>Warning</td>
-      <td>11 days ago</td>
-      <td>Localhost</td>
-      <td>All is good.</td>
-    </tr>
-    <tr class="table-danger">
-      <th scope="row">5</th>
-      <td>Error</td>
-      <td>30 days ago</td>
-      <td>Localhost</td>
-      <td>All is good.</td>
-    </tr>
-    <tr class="table-danger">
-      <th scope="row">6</th>
-      <td>Fatal</td>
-      <td>90 days ago</td>
-      <td>Localhost</td>
-      <td>All is good.</td>
-    </tr>
-    <tr>
+    <!-- looping through the array of messages from server-->
+    <% messages.forEach( message => { %>
+      <tr class="table-light">
+        <td><%=message.severity %></td>
+        <td><%=message.timestamp %></td>
+        <td><%=message.servername %></td>
+        <td><%=message.message %></td>
+      </tr>
+    <% }) %>
 
   </tbody>
 </table>

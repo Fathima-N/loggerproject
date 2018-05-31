@@ -40,7 +40,18 @@ app.use("/api/users", usersRoutes(knex));
 
 // Home page
 app.get("/", (req, res) => {
-  res.render("index");
+  //rendering data from the server. storing the data in the variable templateVars
+  let templateVars = {
+    messages: [ 
+      {
+        severity: "info",
+        timestamp: "5 hours ago",
+        severname: "localhost",
+        message: "all is good"
+      }
+    ]
+  }
+  res.render("index", templateVars);
 });
 
 app.listen(PORT, () => {
