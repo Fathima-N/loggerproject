@@ -14,15 +14,10 @@ const knex        = require("knex")(knexConfig[ENV]);
 const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
 
-// Seperated Routes for each Resource
 const usersRoutes = require("./routes/users");
 
-// Load the logger first so all (static) HTTP requests are logged to STDOUT
-// 'dev' = Concise output colored by response status for development use.
-//         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan('dev'));
 
-// Log knex SQL queries to STDOUT as well
 app.use(knexLogger(knex));
 
 app.set("view engine", "ejs");
@@ -33,12 +28,17 @@ app.use("/styles", sass({
   debug: true,
   outputStyle: 'expanded'
 }));
+
 app.use(express.static("public"));
 
 // Mount all resource routes
-app.use("/api/users", usersRoutes(knex));
+// app.use("/api/users", usersRoutes(knex));
 
-// Home page
+
+app.use(function timeLog(req, res, next) {
+  next();
+});
+  
 app.get("/", (req, res) => {
   // rendering data from the server. storing the data in the variable templateVars
   // let templateVars = {
@@ -67,6 +67,23 @@ app.get("/", (req, res) => {
   // console.log(templateVars)
 
 });
+
+app.post("/api/data", (req, res) => {
+  //WHEN INSERTING data, i have to use a 'then' promise to actually execute the insert. 
+  console.log(req.body.message)
+  knex('logger')
+    .insert({severity: "info", server_name: "localhost", message: req.body.message})
+    .then((results) => {
+      console.log('inserted into db')
+    })
+})
+
+app.get("/api/data", (req, res) => {
+  res.send("hello")
+})
+
+
+
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
