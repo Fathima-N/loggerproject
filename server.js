@@ -21,7 +21,10 @@ app.use(morgan('dev'));
 app.use(knexLogger(knex));
 
 app.set("view engine", "ejs");
-app.use(bodyParser.urlencoded({ extended: true }));
+
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.use("/styles", sass({
   src: __dirname + "/styles",
   dest: __dirname + "/public/styles",
@@ -58,7 +61,7 @@ app.get("/", (req, res) => {
   .select("*")
   .from("logger")
   .then((results) => {
-    let templateVars = {
+    var templateVars = {
       messages: results
     }
    res.render("index", templateVars);
@@ -70,16 +73,16 @@ app.get("/", (req, res) => {
 
 app.post("/api/data", (req, res) => {
   //WHEN INSERTING data, i have to use a 'then' promise to actually execute the insert. 
-  console.log(req.body.message)
+  console.log(req.body.severity)
   knex('logger')
-    .insert({severity: "info", server_name: "localhost", message: req.body.message})
+    .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message})
     .then((results) => {
       console.log('inserted into db')
     })
 })
 
 app.get("/api/data", (req, res) => {
-  res.send("hello")
+  res.send("got the data")
 })
 
 
