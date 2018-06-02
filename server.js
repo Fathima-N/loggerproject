@@ -72,13 +72,21 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/data", (req, res) => {
-  //WHEN INSERTING data, i have to use a 'then' promise to actually execute the insert. 
-  console.log(req.body.severity)
-  knex('logger')
-    .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message})
-    .then((results) => {
-      console.log('inserted into db')
-    })
+
+  if (req.body.severity === "warning" ||
+      req.body.severity === "error" ||
+      req.body.severity === "info" 
+    ) {
+    console.log('it matches')
+    knex('logger')
+      .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message})
+      .then((results) => {
+        console.log('inserted into db')
+      })
+  } else {
+    console.log('Please re-label severity level according to one of the following: warning, info, etc.')
+  }
+
 })
 
 app.get("/api/data", (req, res) => {
