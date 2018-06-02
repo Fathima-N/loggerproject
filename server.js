@@ -56,6 +56,8 @@ app.get("/", (req, res) => {
 
 app.post("/api/data", (req, res) => {
 
+
+
   if (req.body.severity && req.body.server_name && req.body.message || 
       req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
     console.log('good')
@@ -82,7 +84,13 @@ app.get("/api/data", (req, res) => {
   res.send("got the data")
 })
 
+app.get("/login", (req, res) => {
+  res.render("login")
+})
 
+app.get("/register", (req, res) => {
+  res.render("register")
+})
 
 
 app.listen(PORT, () => {
