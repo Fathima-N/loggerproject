@@ -4,6 +4,7 @@ exports.up = function(knex, Promise) {
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
     table.string('server_name');
     table.string('message');
+    table.string('tag');
   });
 };
 

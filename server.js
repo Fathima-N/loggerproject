@@ -43,20 +43,6 @@ app.use(function timeLog(req, res, next) {
 });
   
 app.get("/", (req, res) => {
-  // rendering data from the server. storing the data in the variable templateVars
-  // let templateVars = {
-  //   messages: [ 
-  //     {
-  //       severity: "info",
-  //       timestamp: "5 hours ago",
-  //       sever_name: "localhost",
-  //       message: "all is good"
-  //     }
-  //   ]
-  // }
-
- //rendering data from the database. Knex is using promises - first it's making a query, then it's returning the results, then storing it in the variable templateVars
- //if we first store knex in the tempalteVars variable, it's not based on a promise anymore and won't show anything. 
   knex 
   .select("*")
   .from("logger")
@@ -66,25 +52,28 @@ app.get("/", (req, res) => {
     }
    res.render("index", templateVars);
   })   
-  
-  // console.log(templateVars)
-
 });
 
 app.post("/api/data", (req, res) => {
 
-  if (req.body.severity === "warning" ||
-      req.body.severity === "error" ||
-      req.body.severity === "info" 
-    ) {
-    console.log('it matches')
-    knex('logger')
-      .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message})
-      .then((results) => {
-        console.log('inserted into db')
-      })
+  if (req.body.severity && req.body.server_name && req.body.message || 
+      req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
+    console.log('good')
+    if (req.body.severity === "warning" ||
+        req.body.severity === "error" ||
+        req.body.severity === "info" 
+      ) {
+      console.log('it matches')
+      knex('logger')
+        .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
+        .then((results) => {
+          console.log('inserted into db')
+        })
+    } else {
+      console.log('Please re-label severity level according to one of the following: warning, info or error.')
+    }
   } else {
-    console.log('Please re-label severity level according to one of the following: warning, info, etc.')
+    console.log('Please input the required parameters.')
   }
 
 })
