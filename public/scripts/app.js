@@ -17,14 +17,14 @@ $(document).ready(function() {
   	var company = $("#company").val();
   	var email = $("#email").val();
   	var password = $("#password").val();
-  	console.log(company)
   	$.ajax({
       	method: "POST",
       	url: "/register/:user",
       	data: {company: company, email: email, password: password},
-      	success: function () {
-      		console.log('test?')
-     	 }
+      	success: function (data) {
+          /* 'registrationSuccess' comes from the 'register' route. */
+      		window.location.href = data
+     	  }
   	});
 	})
 })

@@ -82,34 +82,65 @@ app.post("/api/data", (req, res) => {
     }
   } else {
     console.log('Please input the required parameters.')
-  }
+  };
 
-})
+});
 
 app.get("/api/data", (req, res) => {
   res.send("got the data")
-})
-
-
+});
 
 
 app.get("/register", (req, res) => {
    res.render("register")
-})
+});
 
 
 app.post("/register/:user", (req, res) => {
-  console.log(req.body)
-  knex('users')
-        .insert({ company: req.body.company, email: req.body.email, password: req.body.password })
-        .returning(['user_id', 'company'])
-        .then((results) => {
-          var user_id = results[0].user_id
-          var company = results[0].company
-          req.session.user_id = user_id
-          res.redirect("login")
-        })
-})
+  console.log(req.body);
+  
+  /* AUTHENTICATING NEW REGISTRATIONS */
+
+  let company = req.body.company;
+  let email = req.body.email;
+  let password = req.body.password;
+
+  let userExists = false;
+
+  if (email) {
+    knex
+      .select("*")
+      .from("users")
+      .then((results) => {
+        for (let key in results) {
+          if (email === results[key].email) {
+            userExists = true;
+          }
+
+        } 
+        if (userExists) {
+          res.sendStatus(401)
+        } else {
+          knex('users')
+            .insert({ company: req.body.company, email: req.body.email, password: req.body.password })
+            .returning(['id', 'company'])
+            .then((results) => {
+              var userID = results[0].id
+              var company = results[0].company
+              req.session.user_id = userID
+              // res.send("/")
+            })
+        }
+      })
+  };
+
+  if (email === "" || password === "") {
+    res.send("register")
+  } else {
+    res.send("/")
+  };
+
+});
 
 // LOGIN ROUTE
 app.get("/login", (req, res) => {
