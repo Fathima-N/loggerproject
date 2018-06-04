@@ -1,8 +1,8 @@
-const uuidv4 = require('uuid/v4');
+// const uuidv4 = require('uuid/v4');
 
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('users', function(table) {
-  	table.increments('id');
+  	table.increments('id').primary();
   	table.string('company');
   	table.string('email');
   	table.string('password');

@@ -20,7 +20,7 @@ $(document).ready(function() {
   	$.ajax({
       	method: "POST",
       	url: "/register/:user",
-      	data: {company: company, email: email, password: password},
+      	data: {company: company, email: email, password: password, tag: tag, token: token},
       	success: function (data) {
           /* 'registrationSuccess' comes from the 'register' route. */
       		window.location.href = data

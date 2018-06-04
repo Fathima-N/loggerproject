@@ -66,28 +66,32 @@ app.get("/", (req, res) => {
 app.post("/api/data", (req, res) => {
   if (req.body.severity && req.body.server_name && req.body.message || 
       req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
-    console.log('good')
+
     if (req.body.severity === "warning" ||
         req.body.severity === "error" ||
         req.body.severity === "info" 
       ) {
-      console.log('it matches')
+      res.status(200).send('parameters are good');
+
       knex('logger')
         .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
         .then((results) => {
-          console.log('inserted into db')
+          res.status(200).send('inserted into db')
         })
     } else {
-      console.log('Please re-label severity level according to one of the following: warning, info or error.')
+      res.status(200).send('Please re-label severity level according to one of the following: warning, info or error.')
     }
   } else {
-    console.log('Please input the required parameters.')
+    res.status(200).send('Please input the required parameters.')
   };
+
+  res.send('Complete')
 
 });
 
 app.get("/api/data", (req, res) => {
   res.send("got the data")
+  //need to get full list of logs belonging to tokens here
 });
 
 
@@ -116,19 +120,22 @@ app.post("/register/:user", (req, res) => {
           if (email === results[key].email) {
             userExists = true;
           }
-
         } 
+
         if (userExists) {
-          res.sendStatus(401)
+          res.send("/login")
         } else {
           knex('users')
-            .insert({ company: req.body.company, email: req.body.email, password: req.body.password })
+            .insert({ company: req.body.company, email: req.body.email, password: req.body.password, tag: req.body.token, token: req.body.token })
             .returning(['id', 'company'])
             .then((results) => {
               var userID = results[0].id
               var company = results[0].company
+              // var templateVars = {
+              //   messages: results
+              // }
               req.session.user_id = userID
-              // res.send("/")
+              res.send("/")
             })
         }
       })
@@ -136,9 +143,9 @@ app.post("/register/:user", (req, res) => {
 
   if (email === "" || password === "") {
     res.send("register")
-  } else {
-    res.send("/")
-  };
+  }
+
+  res.send('OK')
 
 });
 

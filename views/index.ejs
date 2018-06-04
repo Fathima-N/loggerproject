@@ -36,6 +36,7 @@
             <th scope="col">Timestamp</th>
             <th scope="col">Server Name</th>
             <th scope="col">Message</th>
+            <th scope="col">Tag</th>
           </tr>
         </thead>
         <tbody>
@@ -46,6 +47,7 @@
               <td><%=message.created_at %></td>
               <td><%=message.server_name %></td>
               <td><%=message.message %></td>
+              <td><%=message.tag %></td>            
             </tr>
           <% }) %>
 
