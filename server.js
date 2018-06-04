@@ -16,13 +16,22 @@ const knexLogger  = require('knex-logger');
 
 const usersRoutes = require("./routes/users");
 
+const cookieSession = require("cookie-session");
+
+app.use(
+  cookieSession({
+    name: "session",
+    keys: ["my secret password"]
+  })
+);
+
 app.use(morgan('dev'));
 
 app.use(knexLogger(knex));
 
 app.set("view engine", "ejs");
 
-// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use("/styles", sass({
@@ -55,9 +64,6 @@ app.get("/", (req, res) => {
 });
 
 app.post("/api/data", (req, res) => {
-
-
-
   if (req.body.severity && req.body.server_name && req.body.message || 
       req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
     console.log('good')
@@ -84,14 +90,34 @@ app.get("/api/data", (req, res) => {
   res.send("got the data")
 })
 
+
+
+
+app.get("/register", (req, res) => {
+   res.render("register")
+})
+
+
+app.post("/register/:user", (req, res) => {
+  console.log(req.body)
+  knex('users')
+        .insert({ company: req.body.company, email: req.body.email, password: req.body.password })
+        .returning(['user_id', 'company'])
+        .then((results) => {
+          var user_id = results[0].user_id
+          var company = results[0].company
+          req.session.user_id = user_id
+          res.redirect("login")
+        })
+})
+
+// LOGIN ROUTE
 app.get("/login", (req, res) => {
   res.render("login")
 })
 
-app.get("/register", (req, res) => {
-  res.render("register")
+app.post("/login", (req, res) => {
 })
-
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
