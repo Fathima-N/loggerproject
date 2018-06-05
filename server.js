@@ -52,47 +52,95 @@ app.use(function timeLog(req, res, next) {
 });
   
 app.get("/", (req, res) => {
-  knex 
-  .select("*")
-  .from("logger")
-  .then((results) => {
-    var templateVars = {
-      messages: results
-    }
-   res.render("index", templateVars);
-  })   
+
+  // if (req.session.user_id) {
+    knex 
+    .select("*")
+    .from("logger")
+    .then((results) => {
+      var templateVars = {
+        messages: results
+      }
+     res.render("index", templateVars);
+    })   
+  // } else {
+  //   res.send('You must be logged in.')
+  // }
+
 });
 
-app.post("/api/data", (req, res) => {
-  if (req.body.severity && req.body.server_name && req.body.message || 
-      req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
 
-    if (req.body.severity === "warning" ||
-        req.body.severity === "error" ||
-        req.body.severity === "info" 
-      ) {
-      res.status(200).send('parameters are good');
 
-      knex('logger')
-        .insert({severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
-        .then((results) => {
-          res.status(200).send('inserted into db')
-        })
+app.post("/api/:token/", (req, res) => {
+  let token = req.body.token;
+
+  if (token){
+    if (req.body.severity && req.body.server_name && req.body.message || 
+        req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
+
+      if (req.body.severity === "warning" ||
+          req.body.severity === "error" ||
+          req.body.severity === "info" 
+        ) {
+
+        knex('logger')
+          .insert({user_id: req.session.user_id, severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
+          .then((results) => {
+            res.redirect("/api/:token/data")
+          })
+      } else {
+        //NEED TO SHOW THE LOG RESULT HERE
+        res.status(400).send('HTTP 400: Bad Request. Please re-label severity levels according to one of the following: warning, info or error.')
+      }
     } else {
-      res.status(200).send('Please re-label severity level according to one of the following: warning, info or error.')
-    }
-  } else {
-    res.status(200).send('Please input the required parameters.')
-  };
-
-  res.send('Complete')
-
+      res.status(400).send('HTTP 400: Bad Request. Please input the required parameters.')
+    };
+  }
+    
 });
 
-app.get("/api/data", (req, res) => {
-  res.send("got the data")
-  //need to get full list of logs belonging to tokens here
-});
+app.get("/api/:token/data", (req, res) => {
+  //show all logs that belong to the api key in json format --I CANT BECAUSE THERES NO RELATION OF KEYS TO LOGGER TABLE. 
+  res.send('works')
+})
+
+// app.post("/api/data", (req, res) => {
+
+//   if (req.body.token) {
+//     knex
+//       .select("*")
+//       .from("users")
+//       .then((results) => {
+//         // for (let key in results) {
+//         //   if (token === results[key].token)
+//         // }
+//       })
+//   } else {
+//     res.status(403).send('HTTP 403: Forbidden. Please provide your token to proceed.')
+//   }
+
+//     if (req.body.severity && req.body.server_name && req.body.message || 
+//         req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
+
+//       if (req.body.severity === "warning" ||
+//           req.body.severity === "error" ||
+//           req.body.severity === "info" 
+//         ) {
+
+//         knex('logger')
+//           .insert({user_id: req.session.user_id, severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
+//           .then((results) => {
+//             res.status(201).send('HTTP 102: Created. Request is in database.')
+//           })
+//       } else {
+//         //NEED TO SHOW THE LOG RESULT HERE
+//         res.status(400).send('HTTP 400: Bad Request. Please re-label severity levels according to one of the following: warning, info or error.')
+//       }
+//     } else {
+//       res.status(400).send('HTTP 400: Bad Request. Please input the required parameters.')
+//     };
+
+// });
 
 
 app.get("/register", (req, res) => {
@@ -154,7 +202,24 @@ app.get("/login", (req, res) => {
   res.render("login")
 })
 
-app.post("/login", (req, res) => {
+app.post("/login/:id", (req, res) => {
+  // let email = req.body.email;
+  // let password = req.body.password;
+
+  // if (email) {
+  //    knex
+  //     .select("*")
+  //     .from("users")
+  //     .then((results) => {
+  //       for (let key in results) {
+  //         if (email === results[key].email) {
+  //           foundUser = users[key];
+  //           console.log(foundUser)
+  //         }
+  //       }
+  //     }) 
+  // }
+
 })
 
 app.listen(PORT, () => {
