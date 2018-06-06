@@ -1,12 +1,5 @@
-   // $("#server").keypress(function(event) {
-   // 	if (event.which == 13) {
-   // 		alert('kk')
-   // 	}
-   // });
- 
-
 $(document).ready(function() {
-  $(".form-control").keypress(function (event) {
+  $("#server.form-control").keypress(function (event) {
   	if (event.which == 13) {
     var server = $(this).val();
     console.log(server)

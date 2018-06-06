@@ -122,7 +122,6 @@ app.get("/api/oldest", (req, res) => {
 app.get("/api/serverQueries", (req, res) => {
   /*going to be req.query because the get request is like a URL */
   let serverQuery = req.query.server
-  console.log('hello test', serverQuery)
   knex("logger")
     .where({server_name: serverQuery})
     .then((results) => {
@@ -132,7 +131,21 @@ app.get("/api/serverQueries", (req, res) => {
       res.render("index", templateVars)
       // res.send(`/api/serverQueries?server=${serverQuery}`)
     })
-})
+});
+
+app.get("/api/tagQueries", (req, res) => {
+  /*going to be req.query because the get request is like a URL */
+  let tagQuery = req.query.tag
+  console.log('hello test', tagQuery)
+  knex("logger")
+    .where({tag: tagQuery})
+    .then((results) => {
+      var templateVars = {
+          messages: results
+        }
+      res.render("index", templateVars)
+    })
+});
 
 
 app.post("/api/:token/", (req, res) => {
