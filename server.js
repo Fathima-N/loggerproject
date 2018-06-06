@@ -119,6 +119,22 @@ app.get("/api/oldest", (req, res) => {
 });
 
 
+app.get("/api/serverQueries", (req, res) => {
+  /*going to be req.query because the get request is like a URL */
+  let serverQuery = req.query.server
+  console.log('hello test', serverQuery)
+  knex("logger")
+    .where({server_name: serverQuery})
+    .then((results) => {
+      var templateVars = {
+          messages: results
+        }
+      res.render("index", templateVars)
+      // res.send(`/api/serverQueries?server=${serverQuery}`)
+    })
+})
+
+
 app.post("/api/:token/", (req, res) => {
   let token = req.body.token;
 
@@ -212,32 +228,28 @@ app.get("/login", (req, res) => {
   res.render("login")
 })
 
-app.post("/login/:id", (req, res) => {
-  let email = req.body.email;
-  let password = req.body.password;
-  let userExists = false;
+// app.post("/login/:id", (req, res) => {
+//   let email = req.body.email;
+//   let password = req.body.password;
+//   let userExists = false;
 
-   knex
-    .select("*")
-    .from("users")
-    .then((results) => {
-      for (let key in results) {
-        if (email === results[key].email) {
-          userExists = true
-          console.log(userExists)
-          let userID = email
-          req.session.user_id = userID;
-          // res.send("/")
-        } else {
-          console.log('not working')
-        }
-      }
-    }) 
-  
-
-  // res.send("/")
-
-})
+//    knex
+//     .select("*")
+//     .from("users")
+//     .then((results) => {
+//       for (let key in results) {
+//         if (email === results[key].email) {
+//           userExists = true
+//           console.log(userExists)
+//           let userID = email
+//           req.session.user_id = userID;
+//           // res.send("/")
+//         } else {
+//           console.log('not working')
+//         }
+//       }
+//     }) 
+// })
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);

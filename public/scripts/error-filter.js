@@ -4,6 +4,7 @@ $(document).ready(function(){
     	method: "GET",
     	url: "/api/error",
     	success: function(data) {
+    		console.log(data)
     		window.location.href = data;
     	}
     })
