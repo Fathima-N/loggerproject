@@ -21,6 +21,7 @@
     <script type="text/javascript" src="/scripts/timestamp-oldest.js"></script>
     <script type="text/javascript" src="/scripts/search-server.js"></script>
     <script type="text/javascript" src="/scripts/search-tag.js"></script>
+    <script type="text/javascript" src="/scripts/search-message.js"></script>
   </head>
 
   <body>
@@ -66,21 +67,12 @@
     <div class="container">
       <h3>Search by...</h3>
       
-        <input class="form-control" id="server" type="server" placeholder="Server Name" aria-label="Search">
+        <input class="form-control" id="server" type="server" placeholder="Server Name" aria-label="Search" value="db">
 
-        <input class="form-control" id="message" type="server" placeholder="Message" aria-label="Search" value="Message">
+        <input class="form-control" id="message" type="server" placeholder="Message" aria-label="Search" value="testing from postman2">
 
-        <input class="form-control" id="tag" type="server" placeholder="Tag" aria-label="Search" value="server">
+        <input class="form-control" id="tag" type="server" placeholder="Tag" aria-label="Search">
       
-
-    
-     <!--  <form class="form-inline" type="submit" id="message">
-        <input class="form-control" placeholder="Message" aria-label="Message">
-      </form>
-
-      <form class="form-inline" type="submit" id="tag">
-        <input class="form-control" placeholder="Tag" aria-label="Message">
-      </form> -->
     </div>
   </table>
 
@@ -98,7 +90,7 @@
         </thead>
         <tbody>
           <!-- looping through the array of messages from server-->
-          <% messages.forEach( message => { %>
+          <!-- <% messages.forEach( message => { %>
             <tr class="table-light">
               <td><%=message.severity %></td>
               <td><%=message.created_at %></td>
@@ -106,7 +98,7 @@
               <td><%=message.message %></td>
               <td><%=message.tag %></td>            
             </tr>
-          <% }) %>
+          <% }) %> -->
 
         </tbody>
       </table>
