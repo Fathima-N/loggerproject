@@ -52,7 +52,6 @@ app.use(function timeLog(req, res, next) {
 });
   
 app.get("/", (req, res) => {
-
   knex 
   .select("*")
   .from("logger")
@@ -97,6 +96,27 @@ app.get("/api/error", (req, res) => {
     })
 })
 
+app.get("/api/newest", (req, res) => {
+  knex("logger")
+    .orderBy('created_at', 'desc')
+    .then((results) => {
+      var templateVars = {
+          messages: results
+        }
+      res.render("index", templateVars)
+    })
+});
+
+app.get("/api/oldest", (req, res) => {
+  knex("logger")
+    .orderBy('created_at', 'asc')
+    .then((results) => {
+      var templateVars = {
+          messages: results
+        }
+      res.render("index", templateVars)
+    })
+});
 
 
 app.post("/api/:token/", (req, res) => {

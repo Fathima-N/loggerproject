@@ -12,10 +12,13 @@
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
     <script type="text/javascript" src="/scripts/filter-toggle.js"></script>
-    <script type="text/javascript" src="/scripts/timestamp-toggle.js"></script>
+    <script type="text/javascript" src="/scripts/all-filter.js"></script>
     <script type="text/javascript" src="/scripts/info-filter.js"></script>
     <script type="text/javascript" src="/scripts/warning-filter.js"></script>
     <script type="text/javascript" src="/scripts/error-filter.js"></script>
+    <script type="text/javascript" src="/scripts/timestamp-toggle.js"></script>
+    <script type="text/javascript" src="/scripts/timestamp-newest.js"></script>
+    <script type="text/javascript" src="/scripts/timestamp-oldest.js"></script>
   </head>
 
   <body>
@@ -38,6 +41,7 @@
           <button class="btn btn-warning dropdown-toggle" id="severity" type="button" data-toggle="dropdown">Severity
           <span class="caret"></span></button>
           <ul class="dropdown-menu" id="severity">
+            <li><a id="all" href="/">all</a></li>
             <li><a id="info" href="/api/info">info</a></li>
             <li><a id="warning" href="/api/warning">warning</a></li>
             <li><a id="error" href="/api/error">error</a></li>
@@ -47,9 +51,8 @@
           <button class="btn btn-info dropdown-toggle" id="timestamp" type="button" data-toggle="dropdown">Timestamp
           <span class="caret"></span></button>
           <ul class="dropdown-menu" id="timestamp">
-            <li><a id="info" href="/api/info">info</a></li>
-            <li><a id="warning" href="/api/warning">warning</a></li>
-            <li><a id="error" href="/api/error">error</a></li>
+            <li><a id="newest" href="/api/newest">newest</a></li>
+            <li><a id="oldest" href="/api/oldest">oldest</a></li>
           </ul>
         </div>
       </div>
