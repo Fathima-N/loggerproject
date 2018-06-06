@@ -53,21 +53,49 @@ app.use(function timeLog(req, res, next) {
   
 app.get("/", (req, res) => {
 
-  // if (req.session.user_id) {
-    knex 
-    .select("*")
-    .from("logger")
+  knex 
+  .select("*")
+  .from("logger")
+  .then((results) => {
+    var templateVars = {
+      messages: results
+    }
+   res.render("index", templateVars);
+  })  
+});
+
+app.get("/api/info", (req, res) => {
+  knex("logger")
+      .where({severity: 'info'})
+      .then((results) => {
+        var templateVars = {
+          messages: results
+        }
+        res.render("index", templateVars)
+      })
+});
+
+app.get("/api/warning", (req, res) => {
+  knex("logger")
+    .where({severity: 'warning'})
     .then((results) => {
       var templateVars = {
-        messages: results
-      }
-     res.render("index", templateVars);
-    })   
-  // } else {
-  //   res.send('You must be logged in.')
-  // }
-
+          messages: results
+        }
+      res.render("index", templateVars)
+    })
 });
+
+app.get("/api/error", (req, res) => {
+  knex("logger")
+    .where({severity: 'error'})
+    .then((results) => {
+      var templateVars = {
+          messages: results
+        }
+      res.render("index", templateVars)
+    })
+})
 
 
 
@@ -104,44 +132,6 @@ app.get("/api/:token/data", (req, res) => {
   res.send('works')
 })
 
-// app.post("/api/data", (req, res) => {
-
-//   if (req.body.token) {
-//     knex
-//       .select("*")
-//       .from("users")
-//       .then((results) => {
-//         // for (let key in results) {
-//         //   if (token === results[key].token)
-//         // }
-//       })
-//   } else {
-//     res.status(403).send('HTTP 403: Forbidden. Please provide your token to proceed.')
-//   }
-
-//     if (req.body.severity && req.body.server_name && req.body.message || 
-//         req.body.severity && req.body.server_name && req.body.message && req.body.tag) {
-
-//       if (req.body.severity === "warning" ||
-//           req.body.severity === "error" ||
-//           req.body.severity === "info" 
-//         ) {
-
-//         knex('logger')
-//           .insert({user_id: req.session.user_id, severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
-//           .then((results) => {
-//             res.status(201).send('HTTP 102: Created. Request is in database.')
-//           })
-//       } else {
-//         //NEED TO SHOW THE LOG RESULT HERE
-//         res.status(400).send('HTTP 400: Bad Request. Please re-label severity levels according to one of the following: warning, info or error.')
-//       }
-//     } else {
-//       res.status(400).send('HTTP 400: Bad Request. Please input the required parameters.')
-//     };
-
-// });
-
 
 app.get("/register", (req, res) => {
    res.render("register")
@@ -149,51 +139,51 @@ app.get("/register", (req, res) => {
 
 
 app.post("/register/:user", (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   
-  /* AUTHENTICATING NEW REGISTRATIONS */
+  // /* AUTHENTICATING NEW REGISTRATIONS */
 
-  let company = req.body.company;
-  let email = req.body.email;
-  let password = req.body.password;
+  // let company = req.body.company;
+  // let email = req.body.email;
+  // let password = req.body.password;
 
-  let userExists = false;
+  // let userExists = false;
 
-  if (email) {
-    knex
-      .select("*")
-      .from("users")
-      .then((results) => {
-        for (let key in results) {
-          if (email === results[key].email) {
-            userExists = true;
-          }
-        } 
+  // if (email) {
+  //   knex
+  //     .select("*")
+  //     .from("users")
+  //     .then((results) => {
+  //       for (let key in results) {
+  //         if (email === results[key].email) {
+  //           userExists = true;
+  //         }
+  //       } 
 
-        if (userExists) {
-          res.send("/login")
-        } else {
-          knex('users')
-            .insert({ company: req.body.company, email: req.body.email, password: req.body.password, tag: req.body.token, token: req.body.token })
-            .returning(['id', 'company'])
-            .then((results) => {
-              var userID = results[0].id
-              var company = results[0].company
-              // var templateVars = {
-              //   messages: results
-              // }
-              req.session.user_id = userID
-              res.send("/")
-            })
-        }
-      })
-  };
+  //       if (userExists) {
+  //         res.send("/login")
+  //       } else {
+  //         knex('users')
+  //           .insert({ company: req.body.company, email: req.body.email, password: req.body.password, tag: req.body.token, token: req.body.token })
+  //           .returning(['id', 'company'])
+  //           .then((results) => {
+  //             var userID = results[0].id
+  //             var company = results[0].company
+  //             // var templateVars = {
+  //             //   messages: results
+  //             // }
+  //             req.session.user_id = userID
+  //             res.send("/")
+  //           })
+  //       }
+  //     })
+  // };
 
-  if (email === "" || password === "") {
-    res.send("register")
-  }
+  // if (email === "" || password === "") {
+  //   res.send("register")
+  // }
 
-  res.send('OK')
+  // res.send('OK')
 
 });
 
@@ -203,22 +193,29 @@ app.get("/login", (req, res) => {
 })
 
 app.post("/login/:id", (req, res) => {
-  // let email = req.body.email;
-  // let password = req.body.password;
+  let email = req.body.email;
+  let password = req.body.password;
+  let userExists = false;
 
-  // if (email) {
-  //    knex
-  //     .select("*")
-  //     .from("users")
-  //     .then((results) => {
-  //       for (let key in results) {
-  //         if (email === results[key].email) {
-  //           foundUser = users[key];
-  //           console.log(foundUser)
-  //         }
-  //       }
-  //     }) 
-  // }
+   knex
+    .select("*")
+    .from("users")
+    .then((results) => {
+      for (let key in results) {
+        if (email === results[key].email) {
+          userExists = true
+          console.log(userExists)
+          let userID = email
+          req.session.user_id = userID;
+          // res.send("/")
+        } else {
+          console.log('not working')
+        }
+      }
+    }) 
+  
+
+  // res.send("/")
 
 })
 
