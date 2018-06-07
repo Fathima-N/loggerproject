@@ -142,9 +142,11 @@ app.get("/api/messageQueries", (req, res) => {
   const queryBuilder = knex("logger")
     
     words.forEach(function(word) {
-      queryBuilder.orWhere(message, word)
+      queryBuilder.whereRaw('message LIKE ?', ['%' + word + '%'])
     }) 
-     console.log(words)
+    queryBuilder.then((results) => {
+        console.log(results)
+      })
   
 // PSEUDOCODEEEEE
   // for each word in words
@@ -155,7 +157,7 @@ app.get("/api/messageQueries", (req, res) => {
 });
 
 
-app.post("/api/:token/", (req, res) => {
+app.post("/api/:token", (req, res) => {
   let token = req.body.token;
 
   if (token){
