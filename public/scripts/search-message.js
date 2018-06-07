@@ -1,5 +1,6 @@
 $(document).ready(function() {
   $("#message.form-control").keypress(function (event) {
+    $("tbody").empty();
     if (event.which == 13) {
     var message = $(this).val();
     console.log(message)
@@ -8,15 +9,12 @@ $(document).ready(function() {
         url: "/api/messageQueries",
         data: { message: message },
         success: function (data) {
-          console.log(data)
-          
+          messageResults(data)          
         }
     });
    }
   })
 })
-
-
 
 function messageResults(data) {
     let $message = data.map(message => {

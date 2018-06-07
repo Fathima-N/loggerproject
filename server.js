@@ -101,10 +101,7 @@ app.get("/api/newest", (req, res) => {
   knex("logger")
     .orderBy('created_at', 'desc')
     .then((results) => {
-      var templateVars = {
-          messages: results
-        }
-      res.render("index", templateVars)
+      res.json(results)
     })
 });
 
@@ -112,10 +109,7 @@ app.get("/api/oldest", (req, res) => {
   knex("logger")
     .orderBy('created_at', 'asc')
     .then((results) => {
-      var templateVars = {
-          messages: results
-        }
-      res.render("index", templateVars)
+      res.json(results)
     })
 });
 
@@ -134,7 +128,7 @@ app.get("/api/serverQueries", (req, res) => {
 app.get("/api/tagQueries", (req, res) => {
   /*going to be req.query because the get request is like a URL */
   let tagQuery = req.query.tag
-  console.log('hello test', tagQuery)
+  console.log(tagQuery.split())
   knex("logger")
     .where({tag: tagQuery})
     .then((results) => {
@@ -144,16 +138,20 @@ app.get("/api/tagQueries", (req, res) => {
 
 app.get("/api/messageQueries", (req, res) => {
   /*going to be req.query because the get request is like a URL */
-  let messageQuery = req.query.message
-  console.log('hello test', messageQuery)
-  // knex("logger")
-  //   .where({tag: tagQuery})
-  //   .then((results) => {
-  //     var templateVars = {
-  //         messages: results
-  //       }
-  //     res.render("index", templateVars)
-  //   })
+  let words = req.query.message.split(" ")
+  const queryBuilder = knex("logger")
+    
+    words.forEach(function(word) {
+      queryBuilder.orWhere(message, word)
+    }) 
+     console.log(words)
+  
+// PSEUDOCODEEEEE
+  // for each word in words
+  //    queryBuilder.orWhere(message, word)
+//   queryBuilder.then((results) => {
+//       res.json(results)
+//     })
 });
 
 
@@ -181,6 +179,9 @@ app.post("/api/:token/", (req, res) => {
     } else {
       res.status(400).send('HTTP 400: Bad Request. Please input the required parameters.')
     };
+  }
+  else {
+    res.status(401).send('HTTP 401: Unauthorized. Please provide your token to post a request.')
   }
     
 });
