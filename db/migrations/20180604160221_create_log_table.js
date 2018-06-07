@@ -1,9 +1,11 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('logger', function (table) {
-  	table.biginteger('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE').index();
+  	// table.biginteger('user_id').unsigned().references('id').inTable('users').onDelete('CASCADE').index();
   	// table.biginteger('user_id').unsigned().notNullable().references('id').inTable('users').onDelete('CASCADE').index();
 
     // table.foreign('user_id').references('id').inTable('users');
+    // table.foreign('token_id ').references('token').inTable('users');
+    table.uuid('token_id').references('token').inTable('users');
     table.string('severity');
     table.timestamp('created_at').notNullable().defaultTo(knex.raw('now()'));
     table.string('server_name');
