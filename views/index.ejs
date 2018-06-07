@@ -43,10 +43,10 @@
           <button class="btn btn-warning dropdown-toggle" id="severity" type="button" data-toggle="dropdown">Severity
           <span class="caret"></span></button>
           <ul class="dropdown-menu" id="severity">
-            <li><a id="all" href="/">all</a></li>
-            <li><a id="info" href="/api/info">info</a></li>
-            <li><a id="warning" href="/api/warning">warning</a></li>
-            <li><a id="error" href="/api/error">error</a></li>
+            <li><a id="all" value="all">all</a></li>
+            <li><a id="info">info</a></li>
+            <li><a id="warning">warning</a></li>
+            <li><a id="error">error</a></li>
           </ul>
         </div>
         <div class="dropdown" id="timestamp">
@@ -67,11 +67,11 @@
     <div class="container">
       <h3>Search by...</h3>
       
-        <input class="form-control" id="server" type="server" placeholder="Server Name" aria-label="Search" value="db">
+        <input class="form-control" id="server" type="server" placeholder="Server Name" aria-label="Search">
 
         <input class="form-control" id="message" type="server" placeholder="Message" aria-label="Search" value="testing from postman2">
 
-        <input class="form-control" id="tag" type="server" placeholder="Tag" aria-label="Search">
+        <input class="form-control" id="tag" type="server" placeholder="Tag" aria-label="Search" value="db">
       
     </div>
   </table>
@@ -90,7 +90,7 @@
         </thead>
         <tbody>
           <!-- looping through the array of messages from server-->
-          <!-- <% messages.forEach( message => { %>
+          <% messages.forEach( message => { %>
             <tr class="table-light">
               <td><%=message.severity %></td>
               <td><%=message.created_at %></td>
@@ -98,18 +98,22 @@
               <td><%=message.message %></td>
               <td><%=message.tag %></td>            
             </tr>
-          <% }) %> -->
+          <% }) %>
 
         </tbody>
       </table>
     </div>
-   <!--  <p>Insert some kind of event</p>
-    <form action="submit" method="post">
-      <div>
-        <input type="text" id="hello">
-        <input type="submit">
-      </div>
-    </form> -->
+
+  <nav aria-label="...">
+    <ul class="pagination pagination-lg">
+      <li class="page-item disabled">
+        <a class="page-link" href="#" tabindex="-1">1</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+    </ul>
+  </nav>
+
   </body>
 
 </html>

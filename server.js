@@ -56,6 +56,7 @@ app.get("/", (req, res) => {
   .select("*")
   .from("logger")
   .then((results) => {
+    // res.json(results)
     var templateVars = {
       messages: results
     }
@@ -63,14 +64,20 @@ app.get("/", (req, res) => {
   })  
 });
 
+app.get("/api/all", (req, res) => {
+  knex 
+  .select("*")
+  .from("logger")
+  .then((results) => {
+    res.json(results)
+  })  
+});
+
 app.get("/api/info", (req, res) => {
   knex("logger")
       .where({severity: 'info'})
       .then((results) => {
-        var templateVars = {
-          messages: results
-        }
-        res.render("index", templateVars)
+        res.json(results)
       })
 });
 
@@ -78,10 +85,7 @@ app.get("/api/warning", (req, res) => {
   knex("logger")
     .where({severity: 'warning'})
     .then((results) => {
-      var templateVars = {
-          messages: results
-        }
-      res.render("index", templateVars)
+      res.json(results)
     })
 });
 
@@ -89,10 +93,7 @@ app.get("/api/error", (req, res) => {
   knex("logger")
     .where({severity: 'error'})
     .then((results) => {
-      var templateVars = {
-          messages: results
-        }
-      res.render("index", templateVars)
+      res.json(results)
     })
 })
 
@@ -137,9 +138,6 @@ app.get("/api/tagQueries", (req, res) => {
   knex("logger")
     .where({tag: tagQuery})
     .then((results) => {
-      var templateVars = {
-          messages: results
-        }
       res.json(results)
     })
 });
