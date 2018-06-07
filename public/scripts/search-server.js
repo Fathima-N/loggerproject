@@ -1,7 +1,6 @@
 $(document).ready(function() {
   $("#server.form-control").keypress(function (event) {
     if (event.which == 13) {
-    $("tbody").empty();
     var server = $(this).val();
     console.log(server)
     $.ajax({
@@ -19,6 +18,7 @@ $(document).ready(function() {
 
 
 function searchResults(data) {
+    $("tbody").empty();
     let $search = data.map(message => {
       console.log(message)
       let $result = 

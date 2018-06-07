@@ -1,7 +1,6 @@
 $(document).ready(function() {
   $("#tag.form-control").keypress(function (event) {
     if (event.which == 13) {
-    $("tbody").empty();
     var tag = $(this).val();
     $.ajax({
         method: "GET",
@@ -17,6 +16,7 @@ $(document).ready(function() {
 
 
 function tagResults(data) {
+    $("tbody").empty();
     let $tag = data.map(message => {
       console.log(message)
       let $result = 

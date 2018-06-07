@@ -1,6 +1,5 @@
 $(document).ready(function(){
    $("#error").click(function(event) {
-    $("tbody").empty();
     $.ajax({
         method: "GET",
         url: "/api/error",
@@ -13,6 +12,7 @@ $(document).ready(function(){
 });
 
 function errorResults(data) {
+    $("tbody").empty();
     let $error = data.map(message => {
       console.log(message)
       let $result = 

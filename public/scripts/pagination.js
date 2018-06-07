@@ -1,23 +1,27 @@
 $(document).ready(function() {
-  $("#message.form-control").keypress(function (event) {
-    if (event.which == 13) {
-    var message = $(this).val();
-    console.log(message)
+  $(".page-link").click(function (event) {
+    var offset = $(this).attr('data-offset')
+    var limit = $(this).attr('data-limit')
+
     $.ajax({
         method: "GET",
-        url: "/api/messageQueries",
-        data: { message: message },
+        url: `/api/logs`,
+        // url: `/api/serverQueries?server=${server}`,
+        data: { 
+          // page: page,
+          offset: offset,
+          limit: limit },
         success: function (data) {
-          messageResults(data)          
+          results(data)
         }
     });
-   }
-  })
-})
+  });
+});
 
-function messageResults(data) {
+
+function results(data) {
     $("tbody").empty();
-    let $message = data.map(message => {
+    let $page = data.map(message => {
       console.log(message)
       let $result = 
         `<tr class="table-light">
@@ -29,5 +33,5 @@ function messageResults(data) {
       </tr>`
       return $result;
     })
-    $("tbody").append($message)
+    $("tbody").append($page)
 }

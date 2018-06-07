@@ -1,18 +1,18 @@
 $(document).ready(function(){
    $("#all").click(function(event) {
-    $("tbody").empty();
     $.ajax({
-    	method: "GET",
-    	url: "/api/all",
-    	success: function(data) {
+      method: "GET",
+      url: "/api/all",
+      success: function(data) {
         allResults(data)
-    	}
+      }
     })
   });
 });
 
 
 function allResults(data) {
+    $("tbody").empty();
     let $all = data.map(message => {
       console.log('hello this is', message)
       let $result = 

@@ -1,6 +1,5 @@
 $(document).ready(function(){
    $("#info").click(function(event) {
-   	$("tbody").empty();
     $.ajax({
     	method: "GET",
     	url: "/api/info",
@@ -13,6 +12,7 @@ $(document).ready(function(){
 
 
 function infoResults(data) {
+   	$("tbody").empty();
     let $info = data.map(message => {
       console.log(message)
       let $result = 

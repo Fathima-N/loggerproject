@@ -1,6 +1,5 @@
 $(document).ready(function(){
    $("#warning").click(function(event) {
-    $("tbody").empty();
     $.ajax({
     	method: "GET",
     	url: "/api/warning",
@@ -13,6 +12,7 @@ $(document).ready(function(){
 });
 
 function warningResults(data) {
+    $("tbody").empty();
    let $warning = data.map(message => {
       console.log(message)
       let $result = 

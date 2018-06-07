@@ -1,12 +1,11 @@
 $(document).ready(function(){
    $("#oldest").click(function(event) {
-   	$("tbody").empty();
     $.ajax({
-    	method: "GET",
-    	url: "/api/oldest",
-    	success: function(data) {
-    		oldestResults(data)
-    	}
+      method: "GET",
+      url: "/api/oldest",
+      success: function(data) {
+        oldestResults(data)
+      }
     })
   });
 });
@@ -14,6 +13,7 @@ $(document).ready(function(){
 
 function oldestResults(data) {
     let $oldest = data.map(message => {
+   	$("tbody").empty();
       console.log(message)
       let $result = 
         `<tr class="table-light">

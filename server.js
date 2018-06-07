@@ -55,14 +55,37 @@ app.get("/", (req, res) => {
   knex 
   .select("*")
   .from("logger")
+  .offset(0)
+  .limit(10)
   .then((results) => {
-    // res.json(results)
     var templateVars = {
       messages: results
     }
    res.render("index", templateVars);
   })  
 });
+
+
+app.get("/api/logs", (req, res) => {
+ // let page = req.query.page;
+ let offset = Number(req.query.offset)
+ let limit = Number(req.query.limit)
+  // let perPage = 10;
+  // let limit = perPage;
+  // let offset = (page - 1) * perPage
+ 
+  knex 
+    .select("*")
+    .from("logger")
+    .offset(offset)
+    .limit(limit)
+    .then((results) => {
+      console.log(results)
+      res.json(results)
+      }
+    )
+
+})
 
 app.get("/api/all", (req, res) => {
   knex 
@@ -128,7 +151,6 @@ app.get("/api/serverQueries", (req, res) => {
 app.get("/api/tagQueries", (req, res) => {
   /*going to be req.query because the get request is like a URL */
   let tagQuery = req.query.tag
-  console.log(tagQuery.split())
   knex("logger")
     .where({tag: tagQuery})
     .then((results) => {
@@ -145,7 +167,7 @@ app.get("/api/messageQueries", (req, res) => {
       queryBuilder.whereRaw('message LIKE ?', ['%' + word + '%'])
     }) 
     queryBuilder.then((results) => {
-        console.log(results)
+        res.json(results)
       })
   
 // PSEUDOCODEEEEE

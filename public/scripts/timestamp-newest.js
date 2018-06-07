@@ -1,6 +1,5 @@
 $(document).ready(function(){
    $("#newest").click(function(event) {
-   	$("tbody").empty();
     $.ajax({
     	method: "GET",
     	url: "/api/newest",
@@ -13,6 +12,7 @@ $(document).ready(function(){
 
 
 function newestResults(data) {
+   	$("tbody").empty();
     let $newest = data.map(message => {
       console.log(message)
       let $result = 
