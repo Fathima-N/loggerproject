@@ -63,6 +63,7 @@ app.get("/", (req, res) => {
     }
    res.render("index", templateVars);
   })  
+
 });
 
 
@@ -82,8 +83,15 @@ app.get("/api/logs", (req, res) => {
     .then((results) => {
       console.log(results)
       res.json(results)
-      }
-    )
+    })
+
+  // knex('logger') 
+  //   .count("*")
+  //   .then((count) => {
+  //       let totalRows = Math.ceil(results[0].count / 10);
+  //       console.log(totalRows)
+  //       res.json(count)
+  //   })  
 
 })
 
@@ -169,13 +177,6 @@ app.get("/api/messageQueries", (req, res) => {
     queryBuilder.then((results) => {
         res.json(results)
       })
-  
-// PSEUDOCODEEEEE
-  // for each word in words
-  //    queryBuilder.orWhere(message, word)
-//   queryBuilder.then((results) => {
-//       res.json(results)
-//     })
 });
 
 
@@ -192,7 +193,7 @@ app.post("/api/:token", (req, res) => {
         ) {
 
         knex('logger')
-          .insert({user_id: req.session.user_id, severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
+          .insert({token_id: req.body.token, severity: req.body.severity, server_name: req.body.server_name, message: req.body.message, tag: req.body.tag})
           .then((results) => {
             res.redirect("/api/:token/data")
           })

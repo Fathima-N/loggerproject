@@ -6,7 +6,7 @@ exports.up = function(knex, Promise) {
   	table.string('company');
   	table.string('email');
   	table.string('password');
-  	table.uuid('token').defaultTo(knex.raw('uuid_generate_v4()'));
+  	table.uuid('token').unique().defaultTo(knex.raw('uuid_generate_v4()'));
   })
 };
 
