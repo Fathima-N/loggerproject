@@ -84,15 +84,6 @@ app.get("/api/logs", (req, res) => {
       console.log(results)
       res.json(results)
     })
-
-  // knex('logger') 
-  //   .count("*")
-  //   .then((count) => {
-  //       let totalRows = Math.ceil(results[0].count / 10);
-  //       console.log(totalRows)
-  //       res.json(count)
-  //   })  
-
 })
 
 app.get("/api/all", (req, res) => {
@@ -276,28 +267,33 @@ app.get("/login", (req, res) => {
   res.render("login")
 })
 
-// app.post("/login/:id", (req, res) => {
-//   let email = req.body.email;
-//   let password = req.body.password;
-//   let userExists = false;
+app.post("/login", (req, res) => {
+  let token = req.body.token;
+  console.log(token)
 
-//    knex
-//     .select("*")
-//     .from("users")
-//     .then((results) => {
-//       for (let key in results) {
-//         if (email === results[key].email) {
-//           userExists = true
-//           console.log(userExists)
-//           let userID = email
-//           req.session.user_id = userID;
-//           // res.send("/")
-//         } else {
-//           console.log('not working')
-//         }
-//       }
-//     }) 
-// })
+  let userExists = false;
+
+   knex
+    .select("*")
+    .from("users")
+    .then((results) => {
+      for (let key in results) {
+        if (token === results[key].token) {
+          userExists = true
+          res.send("/")
+          let userID = token
+          req.session.user_id = userID;
+        } else {
+          res.status(401).send('nope')
+        }
+      }
+
+      if (userExists) {
+        res.redirect("/")
+      }
+      
+    }) 
+})
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);

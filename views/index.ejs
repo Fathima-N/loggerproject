@@ -2,123 +2,85 @@
 <html lang="en">
   <head>
     <title>Home Page</title>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
-    <script type="text/javascript" src="/scripts/filter-toggle.js"></script>
-    <script type="text/javascript" src="/scripts/all-filter.js"></script>
-    <script type="text/javascript" src="/scripts/info-filter.js"></script>
-    <script type="text/javascript" src="/scripts/warning-filter.js"></script>
-    <script type="text/javascript" src="/scripts/error-filter.js"></script>
-    <script type="text/javascript" src="/scripts/timestamp-toggle.js"></script>
-    <script type="text/javascript" src="/scripts/timestamp-newest.js"></script>
-    <script type="text/javascript" src="/scripts/timestamp-oldest.js"></script>
-    <script type="text/javascript" src="/scripts/search-server.js"></script>
-    <script type="text/javascript" src="/scripts/search-tag.js"></script>
-    <script type="text/javascript" src="/scripts/search-message.js"></script>
-    <script type="text/javascript" src="/scripts/pagination.js"></script>
+    <% include partials/_head.ejs %>
   </head>
 
   <body>
+    <% include partials/_navbar.ejs %>
 
-    <nav class="navbar sticky-top navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Logger</a>
-      <div>
-        <a class="navbar-brand" href="/login" id="login">Login</a>
-        <a class="navbar-brand" href="/register" id="register">Register</a>
-      </div>
-    </nav>
-
-
-  <table class="table table-sm">
-    <div class="container">
-      <h3>Filter by...</h3>
-      <div class="btn-toolbar">
-        <div class="dropdown" id="severity" style="padding-right: 20px">
-          <button class="btn btn-warning dropdown-toggle" id="severity" type="button" data-toggle="dropdown">Severity
-          <span class="caret"></span></button>
-          <ul class="dropdown-menu" id="severity">
-            <li><a id="all" value="all">all</a></li>
-            <li><a id="info">info</a></li>
-            <li><a id="warning">warning</a></li>
-            <li><a id="error">error</a></li>
-          </ul>
-        </div>
-        <div class="dropdown" id="timestamp">
-            <button class="btn btn-info dropdown-toggle" id="timestamp" type="button" data-toggle="dropdown">Timestamp
+    <table class="table table-sm">
+      <div class="container">
+        <h3>Filter by...</h3>
+        <div class="btn-toolbar">
+          <div class="dropdown" id="severity" style="padding-right: 20px">
+            <button class="btn btn-warning dropdown-toggle" id="severity" type="button" data-toggle="dropdown">Severity
             <span class="caret"></span></button>
-            <ul class="dropdown-menu" id="timestamp">
-              <li><a id="newest">newest</a></li>
-              <li><a id="oldest">oldest</a></li>
+            <ul class="dropdown-menu" id="severity">
+              <li><a id="all" value="all">all</a></li>
+              <li><a id="info">info</a></li>
+              <li><a id="warning">warning</a></li>
+              <li><a id="error">error</a></li>
             </ul>
+          </div>
+          <div class="dropdown" id="timestamp">
+              <button class="btn btn-info dropdown-toggle" id="timestamp" type="button" data-toggle="dropdown">Timestamp
+              <span class="caret"></span></button>
+              <ul class="dropdown-menu" id="timestamp">
+                <li><a id="newest">newest</a></li>
+                <li><a id="oldest">oldest</a></li>
+              </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </table>
+    </table>
 
+    <table class="table table-sm">
+      <div class="container">
+        <h3>Search by...</h3>
+        
+          <input class="form-control" id="server" type="server" placeholder="Server Name" aria-label="Search">
 
+          <input class="form-control" id="message" type="server" placeholder="Message" aria-label="Search">
 
-  <table class="table table-sm">
-    <div class="container">
-      <h3>Search by...</h3>
-      
-        <input class="form-control" id="server" type="server" placeholder="Server Name" aria-label="Search">
+          <input class="form-control" id="tag" type="server" placeholder="Tag" aria-label="Search">
+        
+      </div>
+    </table>
 
-        <input class="form-control" id="message" type="server" placeholder="Message" aria-label="Search">
-
-        <input class="form-control" id="tag" type="server" placeholder="Tag" aria-label="Search">
-      
-    </div>
-  </table>
-
-    <div class="main-container">
-      <h2>Event Logs</h2>
-      <table class="table table-sm">
-        <thead>
-          <tr>
-            <th scope="col">Severity</th>
-            <th scope="col">Timestamp</th>
-            <th scope="col">Server Name</th>
-            <th scope="col">Message</th>
-            <th scope="col">Tag</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- looping through the array of messages from server-->
-          <% messages.forEach( message => { %>
-            <tr class="table-light">
-              <td><%=message.severity %></td>
-              <td><%=message.created_at %></td>
-              <td><%=message.server_name %></td>
-              <td><%=message.message %></td>
-              <td><%=message.tag %></td>            
+      <div class="main-container">
+        <h2>Event Logs</h2>
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Severity</th>
+              <th scope="col">Timestamp</th>
+              <th scope="col">Server Name</th>
+              <th scope="col">Message</th>
+              <th scope="col">Tag</th>
             </tr>
-          <% }) %>
+          </thead>
+          <tbody>
+            <!-- looping through the array of messages from server-->
+            <% messages.forEach( message => { %>
+              <tr class="table-light">
+                <td><%=message.severity %></td>
+                <td><%=message.created_at %></td>
+                <td><%=message.server_name %></td>
+                <td><%=message.message %></td>
+                <td><%=message.tag %></td>            
+              </tr>
+            <% }) %>
 
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
+
+    <div class="row align-items-center justify-content-center">
+      <nav aria-label="...">
+        <ul class="pagination pagination-lg">
+        </ul>
+      </nav>
     </div>
-
-  <div class="row align-items-center justify-content-center">
-    <nav aria-label="...">
-      <ul class="pagination pagination-lg">
-      <!--   <li class="page-item"><a class="page-link" id="page1" type="page1" tabindex="-1" data-offset="0" data-limit="10">1</a>
-        </li> -->
-       <!--  <li class="page-item"><a class="page-link" id="page2" type="page2" value="page2" data-offset="10" data-limit="10">2</a></li>
-        <li class="page-item"><a class="page-link" id="page3" type="page3" data-offset="20" data-limit="10">3</a></li>
-        <li class="page-item"><a class="page-link" id="page3" type="page3" data-offset="30" data-limit="10">4</a></li> -->
-      </ul>
-    </nav>
-  </div>
-
-  <div id="new">
-  </div>
 
   </body>
 

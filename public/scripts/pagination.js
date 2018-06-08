@@ -5,21 +5,22 @@ $(document).ready(function() {
       success: function (data) {
         pageNumbers(data)
 
-        $(".page-link").click(function (event) {
-          var offset = $(this).attr('data-offset')
-          var limit = $(this).attr('data-limit')
-          $.ajax({
-              method: "GET",
-              url: `/api/logs`,
-              data: { 
-                offset: offset,
-                limit: limit },
-              success: function (data) {
-                results(data)
-              }
-          });
-        });
       }
+    });
+    
+    $("body").on("click", ".page-link", function (event) {
+      var offset = $(this).attr('data-offset')
+      var limit = $(this).attr('data-limit')
+      $.ajax({
+          method: "GET",
+          url: `/api/logs`,
+          data: { 
+            offset: offset,
+            limit: limit },
+          success: function (data) {
+            results(data)
+          }
+      });
     });
 });
 
