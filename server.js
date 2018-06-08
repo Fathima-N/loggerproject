@@ -52,18 +52,34 @@ app.use(function timeLog(req, res, next) {
 });
   
 app.get("/", (req, res) => {
-  knex 
-  .select("*")
-  .from("logger")
-  .offset(0)
-  .limit(10)
-  .then((results) => {
-    var templateVars = {
-      messages: results
-    }
-   res.render("index", templateVars);
-  })  
+    //NEED TO TEST IF THIS WORKS
+  let cookie = req.session.user_id
+  if (cookie) {
+    knex("logger")
+      .where({ token_id: cookie })
+      .offset(0)
+      .limit(10)
+      .then((results) => {
+        var templateVars = {
+          messages: results
+        }
+       res.render("index", templateVars);
+      })  
 
+    // knex 
+    // .select("*")
+    // .from("logger")
+    // .offset(0)
+    // .limit(10)
+    // .then((results) => {
+    //   var templateVars = {
+    //     messages: results
+    //   }
+    //  res.render("index", templateVars);
+    // })  
+  } else {
+    res.redirect("/login")
+  }
 });
 
 
@@ -269,8 +285,6 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   let token = req.body.token;
-  console.log(token)
-
   let userExists = false;
 
    knex
@@ -280,10 +294,12 @@ app.post("/login", (req, res) => {
       for (let key in results) {
         if (token === results[key].token) {
           userExists = true
-          res.send("/")
+          console.log(userExists)
           let userID = token
           req.session.user_id = userID;
+          res.send("/")
         } else {
+          console.log(userExists)
           res.status(401).send('nope')
         }
       }
